@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>自动签到助手</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h2>自动签到助手</h2>
+      <div class="header-buttons">
+        <button id="view-logs-btn" class="btn-secondary">执行记录</button>
+        <button id="add-task-btn" class="btn-primary">添加任务</button>
+      </div>
+    </header>
+    
+    <div id="main-view">
+      <div id="task-list" class="task-list">
+        <!-- 任务列表将在这里动态生成 -->
+      </div>
+    </div>
+
+    <!-- 执行记录视图 -->
+    <div id="logs-view" class="hidden">
+      <div class="logs-header">
+        <button id="back-to-tasks" class="btn-secondary">← 返回任务</button>
+        <button id="clear-logs" class="btn-secondary">清空记录</button>
+      </div>
+      <div id="logs-list" class="logs-list">
+        <!-- 执行记录将在这里显示 -->
+      </div>
+    </div>
+    
+    <!-- 添加/编辑任务模态框 -->
+    <div id="task-modal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="modal-title">添加任务</h3>
+          <span class="close">&times;</span>
+        </div>
+        <form id="task-form">
+          <div class="form-group">
+            <label for="task-name">任务名称:</label>
+            <input type="text" id="task-name" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="website-url">网站URL:</label>
+            <input type="url" id="website-url" required placeholder="https://example.com">
+          </div>
+          
+          <div class="form-group">
+            <label for="signin-selector">签到按钮选择器:</label>
+            <input type="text" id="signin-selector" required placeholder=".signin-btn 或 #signin">
+          </div>
+          
+          <div class="form-group">
+            <label for="schedule-type">调度类型:</label>
+            <select id="schedule-type">
+              <option value="interval">定时间隔</option>
+              <option value="cron">Cron表达式</option>
+            </select>
+          </div>
+          
+          <div id="interval-config" class="schedule-config">
+            <div class="form-group">
+              <label for="interval-value">间隔值:</label>
+              <input type="number" id="interval-value" min="1" value="1">
+            </div>
+            <div class="form-group">
+              <label for="interval-unit">时间单位:</label>
+              <select id="interval-unit">
+                <option value="minutes">分钟</option>
+                <option value="hours">小时</option>
+                <option value="days">天</option>
+              </select>
+            </div>
+          </div>
+          
+          <div id="cron-config" class="schedule-config hidden">
+            <div class="form-group">
+              <label for="cron-expression">Cron表达式:</label>
+              <input type="text" id="cron-expression" placeholder="0 9 * * *">
+              <small>格式: 分 时 日 月 周 (例: 0 9 * * * 表示每天9点)</small>
+            </div>
+            <div class="form-group">
+              <button type="button" id="validate-cron" class="btn-secondary">验证表达式</button>
+              <div id="cron-validation" class="cron-validation"></div>
+            </div>
+            <div class="cron-examples">
+              <small>常用示例:</small>
+              <div class="cron-example-list" id="cron-examples"></div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label>
+              <input type="checkbox" id="task-enabled" checked>
+              启用任务
+            </label>
+          </div>
+          
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">保存</button>
+            <button type="button" id="cancel-btn" class="btn-secondary">取消</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <script src="cron-parser.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
